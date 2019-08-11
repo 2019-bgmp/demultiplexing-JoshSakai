@@ -1,0 +1,127 @@
+622 Project Notebook
+Bio seq in 1 and 4, barcode seq in 2 and 3
+if barcode contains N then straight into the bin it goes
+both index 1 and index 2 are read in the 5' to 3'
+
+file format
+R1 = forward
+R2 = reverse
+combined they are paired end reads
+
+unk_R1.fq
+@seq1_index1_index2
+ATGGCA
++
+qscore
+
+unk_R2.fq
+@seq2_index1_index2
+TGACGG
++
+qscore
+
+number of entries: 363246735
+
+Psuedocode:
+index_qscore_cutoff = value determined in part1
+read_qscore_cutoff = value determined in part 1
+
+low_Q_count =0
+index_hop_count =0
+good_read_count =0
+
+def convert_phred(letter):			#reads the ASCII quality score and converts it into a number value
+   """Converts a single character into a phred score"""
+	return ord(letter)-33
+
+def rv_comp(seq):
+"""converts the DNA string into it's reverse compliment"""
+using a dictionary store a conversion set of key, values to convert the reverse barcode so that it can be directly compared to the forward barcode. 
+REMEMBER you need to invert the string first since you want to return the reverse compliment
+A --> T
+T --> A
+C --> G
+G --> C
+returns a reverse compliment which should match the forward read exactly
+
+barcode_ref = set where each value is each line of the barcodes file after stripping new line characters.
+"""This is a set of all the correct barcodes that we want for our paired reads"""
+stores all of our valid barcodes
+returns the barcode set to search through
+
+def zip_open(read_file):
+"""this means we have an easy way to cross reference between files and opens all the files we will have to write to once to save time"""
+Open all 4 read files simultaneously using the zip function and read them 4 lines at a time in an iterative manner, create 48 blank files based on the outfile_list file handles to append the good reads to.
+returns a single read at a time parallel across all files
+
+def outfile_list(read):
+"""this takes the 24 bar codes from our barcode_ref and uses rv_comp function to create a set of 48 out file handles, 24 forward and 24 for the reverse"""
+create a dictionary where the keys are (R2_sequence_line"-"R3_sequence_line) and where the values are a tuple of str(key+"_fw.fastq",key+"_rv.fastq")
+returns a dictionary that allows for parsing the good reads to their proper output files
+
+def header_edit(read)
+"""add the forward and reverse barcode to the end of the header line"""
+before each header line from the read array is being appended to their respective output file add the sequence line from the R2 and R3 files to the end of the header
+returns a modified header which updates the array with the forward read and the array that contains the reverse read
+
+def index_hop(read):
+"""sorts index hopped reads and then outputs them into their own output files"""
+if the 2 index values are of high quality and in our barcodes set BUT do not match each other
+--> run the header_edit and then append the forward and reverse reads into their own seperate outputs, add 1 to index_hop_count
+returns 2 output files, one for the forward read and one for the reverse
+
+def low_Q(read):
+"""sorts reads with indexes that contain N's or low average quality and then outputs the reads into"""
+if the index read contains an N output
+OR
+the barcode in the read does not match to any barcode in the barcode_ref set
+OR
+if the barcodes match to our set but contain a single base quality score is lower than the set index_qscore_cutoff
+OR
+if the read average base quality score is lower than the set read_qscore_cutoff
+--> run the header_edit then append the forward and reverse reads into seperate files, add 1 to low_Q_count
+returns 2 output files, one for the forward read and one for the reverse
+
+
+make a temporary array for each file that is populated by 4 strings, each string will be a line
+# for each file, [line 1 = header, line 2 = sequence (read or index), line 3 = +, line 4 = quality_score]
+# after the sorting has been done the next 4 lines in the file will replace the values in the array for each file
+
+for each read in the files do the following functions
+#checking to see if each of our criterias for bad reads are met
+
+for each of the following definitions if the criteria that comes before the append to output statement is false break out of the function
+#if the read proves false to the definition than it may be a good read
+
+if neither of the index_hop or low_Q functions return true
+check to see if the two indexs in the reads after running the rv_comp funciton on the reverse compliment are the same
+if they are then write each read array into a seperate out file for forward and reverse after running the header_edit function, add 1 to good_read_count
+which file the read is appended to is determined by checking the string that header_edit is adding to the header line against the dictionary of outfiles
+once the key is matched prin the R1 array to the file handle that matches the first value in the tuple, and the R4 read into the file handle that matches the second value in the tuple.
+
+
+
+Sample code drafts (PURELY FOR HELPING WORKING THROUGH THE PSEUDOCODE LOGIC)
+
+for each read:			# make some kind of for statement to make the processs iterative
+	status = 0			# a return variable to determine which output files the read and index will go to
+# 0 = a paired good read
+# 1 = low quality/not in the barcode set
+# 2 = index hopping
+	strip new line characters				#so they are not counted in the outs
+
+	# line definition = [0, 1, 2, 3]
+	read_1 = [header, seq, +, quality_score]
+	read_2 = [header, seq, +, quality_score]
+	index_1 = [header, seq, +, quality_score]
+	index_2 = [header, seq, +, quality_score]
+	#once these lines have defined categories and can be compared we need to create a series of if statements to test for our undesirable reads.
+
+	if the the index_1[1] or 
+
+
+
+	if status = 0
+		open (f_paired, "a") as fw:						#appending rather than writing is important since this is iterative
+			f.write(read_1[0]+"_"+index_1[1]+"-"index_2[1])			#this would write the header and add the seq line from the index files to the end of the header
+			f.write(the rest of the read_1 array into the file, mindful to add newline characters)		#this means the whole R1 read gets output
