@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#SBATCH --account=bgmp          ### SLURM account which will be charged for the job
+#SBATCH --partition=bgmp        ### Partition (like a queue in PBS)
+#SBATCH --job-name=N_dex      ### Job Name
+#SBATCH --output=N_dex.out         ### File in which to store job output
+#SBATCH --error=N_dex.err          ### File in which to store job error messages
+#SBATCH --time=01:00:00       ### Wall clock time limit in Days-HH:MM:SS
+#SBATCH --nodes=1               ### Node count required for the job
+#SBATCH --ntasks-per-node=1     ### Nuber of tasks to be launched per Node
+#SBATCH --cpus-per-task=2       ### Number of cpus (cores) per task
+
+zcat /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R2_001.fastq.gz | paste - - - - | cut -f 2 | grep 'N' | wc -l
+
+zcat /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R3_001.fastq.gz | paste - - - - | cut -f 2 | grep 'N' | wc -l
