@@ -1,18 +1,18 @@
 	Command being timed: "./demultiplex.py -r1 1294_S1_L008_R1_001.fastq.gz -r2 1294_S1_L008_R4_001.fastq.gz -i1 1294_S1_L008_R2_001.fastq.gz -i2 1294_S1_L008_R3_001.fastq.gz -q 25 -b barcodes.tsv"
-	User time (seconds): 9936.61
-	System time (seconds): 51.57
-	Percent of CPU this job got: 96%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 2:52:02
+	User time (seconds): 9826.72
+	System time (seconds): 52.36
+	Percent of CPU this job got: 71%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 3:51:42
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 184932
+	Maximum resident set size (kbytes): 184928
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 772095
-	Voluntary context switches: 124691
-	Involuntary context switches: 23657
+	Minor (reclaiming a frame) page faults: 1917727
+	Voluntary context switches: 109713
+	Involuntary context switches: 23523
 	Swaps: 0
 	File system inputs: 0
 	File system outputs: 0
